@@ -1,0 +1,30 @@
+[
+  {
+    "id": "168dd0d4-fcfa-4971-97f4-41b96c330ae2",
+    "title": "Crear la App",
+    "description": "Requiero crear una aplicacion de TODO",
+    "date_creacion": "2026-09-11T17:38:52.412370+00:00",
+    "estado": "done"
+  },
+  {
+    "id": "0816569c-aad7-4bed-9e17-edd723504c1c",
+    "title": "subirlo a github",
+    "description": "hay que subirlo a github",
+    "date_creacion": "2026-09-11T17:48:08.349417+00:00",
+    "estado": "doing"
+  },
+  {
+    "id": "3f473b90-fba3-4a25-9d04-d769e10ebf8f",
+    "title": "montarlo en Azure",
+    "description": "Montar el aplicativo en azure",
+    "date_creacion": "2026-09-11T17:48:34.090034+00:00",
+    "estado": "todo"
+  },
+  {
+    "id": "039f0b96-9ef6-405d-8b68-99a882dc6fa6",
+    "title": "probar el aplicativo en prod",
+    "description": "pruebas de produccion",
+    "date_creacion": "2026-09-11T17:49:05.030140+00:00",
+    "estado": "todo"
+  }
+]

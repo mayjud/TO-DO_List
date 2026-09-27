@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanban To-Do</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Board</p>
+          <h1>Kanban To-Do</h1>
+        </div>
+        <button class="primary-btn" id="openModalBtn">+ Nueva tarea</button>
+      </header>
+
+      <main class="board" aria-label="Tablero Kanban">
+        <section class="column">
+          <div class="column-head todo">
+            <h2>Por realizar</h2>
+            <span>{{ todo_tasks|length }}</span>
+          </div>
+          <div class="task-list" id="todo-list">
+            {% for task in todo_tasks %}
+              <article class="task-card" data-id="{{ task.id }}">
+                <div class="task-header">
+                  <h3>{{ task.title }}</h3>
+                  <form method="post" action="/tasks/{{ task.id }}/delete">
+                    <button type="submit" class="delete-btn" aria-label="Eliminar tarea">×</button>
+                  </form>
+                </div>
+                <p>{{ task.description or 'Sin descripción' }}</p>
+                <small>{{ task.date_creacion }}</small>
+                <div class="task-actions multi-step">
+                  <form method="post" action="/tasks/{{ task.id }}/move">
+                    <input type="hidden" name="estado" value="doing" />
+                    <button type="submit" class="secondary-btn">Mover a en proceso</button>
+                  </form>
+                  <form method="post" action="/tasks/{{ task.id }}/move">
+                    <input type="hidden" name="estado" value="done" />
+                    <button type="submit" class="secondary-btn small">Marcar como realizada</button>
+                  </form>
+                </div>
+              </article>
+            {% else %}
+              <div class="empty-state">No hay tareas por realizar.</div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="column">
+          <div class="column-head doing">
+            <h2>En proceso</h2>
+            <span>{{ doing_tasks|length }}</span>
+          </div>
+          <div class="task-list" id="doing-list">
+            {% for task in doing_tasks %}
+              <article class="task-card" data-id="{{ task.id }}">
+                <div class="task-header">
+                  <h3>{{ task.title }}</h3>
+                  <form method="post" action="/tasks/{{ task.id }}/delete">
+                    <button type="submit" class="delete-btn" aria-label="Eliminar tarea">×</button>
+                  </form>
+                </div>
+                <p>{{ task.description or 'Sin descripción' }}</p>
+                <small>{{ task.date_creacion }}</small>
+                <div class="task-actions multi-step">
+                  <form method="post" action="/tasks/{{ task.id }}/move">
+                    <input type="hidden" name="estado" value="todo" />
+                    <button type="submit" class="secondary-btn small">Regresar a por realizar</button>
+                  </form>
+                  <form method="post" action="/tasks/{{ task.id }}/move">
+                    <input type="hidden" name="estado" value="done" />
+                    <button type="submit" class="secondary-btn">Marcar como realizada</button>
+                  </form>
+                </div>
+              </article>
+            {% else %}
+              <div class="empty-state">No hay tareas en proceso.</div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="column">
+          <div class="column-head done">
+            <h2>Realizadas</h2>
+            <span>{{ done_tasks|length }}</span>
+          </div>
+          <div class="task-list" id="done-list">
+            {% for task in done_tasks %}
+              <article class="task-card complete" data-id="{{ task.id }}">
+                <div class="task-header">
+                  <h3>{{ task.title }}</h3>
+                  <form method="post" action="/tasks/{{ task.id }}/delete">
+                    <button type="submit" class="delete-btn" aria-label="Eliminar tarea">×</button>
+                  </form>
+                </div>
+                <p>{{ task.description or 'Sin descripción' }}</p>
+                <small>{{ task.date_creacion }}</small>
+                <div class="task-actions multi-step">
+                  <form method="post" action="/tasks/{{ task.id }}/move">
+                    <input type="hidden" name="estado" value="todo" />
+                    <button type="submit" class="secondary-btn small">Volver a por realizar</button>
+                  </form>
+                  <form method="post" action="/tasks/{{ task.id }}/move">
+                    <input type="hidden" name="estado" value="doing" />
+                    <button type="submit" class="secondary-btn">Mover a en proceso</button>
+                  </form>
+                </div>
+              </article>
+            {% else %}
+              <div class="empty-state">Aún no hay tareas completadas.</div>
+            {% endfor %}
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="taskModal" class="modal hidden" aria-modal="true" role="dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Nueva tarea</h2>
+          <button id="closeModalBtn" class="close-btn" aria-label="Cerrar">×</button>
+        </div>
+
+        <form method="post" action="/tasks">
+          <label>
+            Título
+            <input type="text" name="title" placeholder="Ej. Diseñar dashboard" required />
+          </label>
+
+          <label>
+            Descripción
+            <textarea name="description" rows="4" placeholder="Describe la tarea..."></textarea>
+          </label>
+
+          <label>
+            Estado
+            <select name="estado">
+              <option value="todo">Por realizar</option>
+              <option value="doing">En proceso</option>
+              <option value="done">Realizadas</option>
+            </select>
+          </label>
+
+          <div class="modal-actions">
+            <button type="button" class="ghost-btn" id="cancelModalBtn">Cancelar</button>
+            <button type="submit" class="primary-btn">Guardar tarea</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
